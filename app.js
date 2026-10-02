@@ -85,7 +85,7 @@ function getProducts() {
 function getOrders() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const isError = Math.random() < 0.5; // 50% lỗi
+      const isError = false; // 50% lỗi
 
       if (isError) {
         reject("Lỗi kết nối Server!");
