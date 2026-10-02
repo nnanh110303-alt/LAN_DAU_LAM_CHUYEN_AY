@@ -59,74 +59,101 @@
 
 
 
-// ===== Các hàm giả lập API =====
-function getUser() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log("✅ Lấy thông tin user thành công");
-      resolve({ id: 1, name: "Nguyễn Văn A" });
-    }, 1000); // 1 giây
-  });
-}
+// // ===== Các hàm giả lập API =====
+// function getUser() {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       console.log("✅ Lấy thông tin user thành công");
+//       resolve({ id: 1, name: "Nguyễn Văn A" });
+//     }, 1000); // 1 giây
+//   });
+// }
 
-function getProducts() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log("✅ Lấy danh sách sản phẩm gợi ý thành công");
-      resolve([
-        { id: 101, name: "iPhone 16" },
-        { id: 102, name: "MacBook Pro" },
-      ]);
-    }, 1500); // 1.5 giây
-  });
-}
+// function getProducts() {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       console.log("✅ Lấy danh sách sản phẩm gợi ý thành công");
+//       resolve([
+//         { id: 101, name: "iPhone 16" },
+//         { id: 102, name: "MacBook Pro" },
+//       ]);
+//     }, 1500); // 1.5 giây
+//   });
+// }
 
-// Yêu cầu 1: getOrders có 50% khả năng bị lỗi
-function getOrders() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const isError = false; // 50% lỗi
+// // Yêu cầu 1: getOrders có 50% khả năng bị lỗi
+// function getOrders() {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       const isError = false; // 50% lỗi
 
-      if (isError) {
-        reject("Lỗi kết nối Server!");
-      } else {
-        console.log("✅ Lấy lịch sử đơn hàng thành công");
-        resolve([
-          { id: 1001, total: 25000000 },
-          { id: 1002, total: 4500000 },
-        ]);
-      }
-    }, 800); // 0.8 giây
-  });
-}
+//       if (isError) {
+//         reject("Lỗi kết nối Server!");
+//       } else {
+//         console.log("✅ Lấy lịch sử đơn hàng thành công");
+//         resolve([
+//           { id: 1001, total: 25000000 },
+//           { id: 1002, total: 4500000 },
+//         ]);
+//       }
+//     }, 800); // 0.8 giây
+//   });
+// }
 
-// ===== Hàm chính =====
-async function main() {
-  console.log("🚀 Bắt đầu tải Dashboard...\n");
+// // ===== Hàm chính =====
+// async function main() {
+//   console.log("🚀 Bắt đầu tải Dashboard...\n");
 
-  const start = Date.now();
+//   const start = Date.now();
 
-  try {
-    // Yêu cầu 2: Chạy song song bằng Promise.all
-    const [user, products, orders] = await Promise.all([
-      getUser(),
-      getProducts(),
-      getOrders(),
-    ]);
+//   try {
+//     // Yêu cầu 2: Chạy song song bằng Promise.all
+//     const [user, products, orders] = await Promise.all([
+//       getUser(),
+//       getProducts(),
+//       getOrders(),
+//     ]);
 
-    console.log("\n===== DỮ LIỆU DASHBOARD =====");
-    console.log("User:", user);
-    console.log("Products:", products);
-    console.log("Orders:", orders);
-  } catch (error) {
-    // Bắt lỗi nếu getOrders bị reject
-    console.error("\n❌ Đã xảy ra lỗi:", error);
-    console.log("Ứng dụng vẫn tiếp tục chạy, không bị sập!");
-  }
+//     console.log("\n===== DỮ LIỆU DASHBOARD =====");
+//     console.log("User:", user);
+//     console.log("Products:", products);
+//     console.log("Orders:", orders);
+//   } catch (error) {
+//     // Bắt lỗi nếu getOrders bị reject
+//     console.error("\n❌ Đã xảy ra lỗi:", error);
+//     console.log("Ứng dụng vẫn tiếp tục chạy, không bị sập!");
+//   }
 
-  const end = Date.now();
-  console.log(`\n⏱️  Tổng thời gian thực tế: ${((end - start) / 1000).toFixed(2)} giây`);
-}
+//   const end = Date.now();
+//   console.log(`\n⏱️  Tổng thời gian thực tế: ${((end - start) / 1000).toFixed(2)} giây`);
+// }
 
-// Chạy chương trình
-main();
+// // Chạy chương trình
+// main();
+
+
+
+const math = require("./math");
+
+// === Ví dụ nghiệp vụ bán hàng ===
+
+// 1. Tính thành tiền một sản phẩm
+const soLuong = 5;
+const donGia = 120000; // 120.000đ
+const thanhTien = math.multiply(soLuong, donGia);
+console.log("Thành tiền 1 sản phẩm:", thanhTien); // 600000
+
+// 2. Cộng nhiều dòng hóa đơn
+const tongTienHang = math.add(thanhTien, 350000); // thêm 1 sản phẩm khác
+console.log("Tổng tiền hàng:", tongTienHang); // 950000
+
+// 3. Trừ giảm giá
+const giamGia = 50000;
+const tongThanhToan = math.subtract(tongTienHang, giamGia);
+console.log("Tổng thanh toán sau giảm giá:", tongThanhToan); // 900000
+
+// 4. Chia doanh thu cho 3 nhân viên
+const doanhThuNgay = 900000;
+const soNhanVien = 3;
+const doanhThuMoiNguoi = math.divide(doanhThuNgay, soNhanVien);
+console.log("Doanh thu mỗi nhân viên:", doanhThuMoiNguoi); // 300000
