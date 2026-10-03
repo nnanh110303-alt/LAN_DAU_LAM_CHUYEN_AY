@@ -133,27 +133,31 @@
 
 
 
-const math = require("./math");
+const order = require("../order");
 
-// === Ví dụ nghiệp vụ bán hàng ===
+console.log("========== TEST THANH TOÁN VNPAY ==========");
+const ketQuaVnpay = order.createOrder({
+    items: [
+        { name: "Áo thun", quantity: 2, price: 250000 },
+        { name: "Quần jean", quantity: 1, price: 450000 }
+    ],
+    customerEmail: "khachhang@email.com",
+    discount: 50000
+}, "vnpay");
 
-// 1. Tính thành tiền một sản phẩm
-const soLuong = 5;
-const donGia = 120000; // 120.000đ
-const thanhTien = math.multiply(soLuong, donGia);
-console.log("Thành tiền 1 sản phẩm:", thanhTien); // 600000
+console.log("Kết quả tạo đơn hàng (VNPay):");
+console.log(ketQuaVnpay);
 
-// 2. Cộng nhiều dòng hóa đơn
-const tongTienHang = math.add(thanhTien, 350000); // thêm 1 sản phẩm khác
-console.log("Tổng tiền hàng:", tongTienHang); // 950000
 
-// 3. Trừ giảm giá
-const giamGia = 50000;
-const tongThanhToan = math.subtract(tongTienHang, giamGia);
-console.log("Tổng thanh toán sau giảm giá:", tongThanhToan); // 900000
+console.log("\n========== TEST THANH TOÁN MOMO ==========");
+const ketQuaMomo = order.createOrder({
+    items: [
+        { name: "Áo thun", quantity: 2, price: 250000 },
+        { name: "Quần jean", quantity: 1, price: 450000 }
+    ],
+    customerEmail: "khachhang@email.com",
+    discount: 50000
+}, "momo");
 
-// 4. Chia doanh thu cho 3 nhân viên
-const doanhThuNgay = 900000;
-const soNhanVien = 3;
-const doanhThuMoiNguoi = math.divide(doanhThuNgay, soNhanVien);
-console.log("Doanh thu mỗi nhân viên:", doanhThuMoiNguoi); // 300000
+console.log("Kết quả tạo đơn hàng (Momo):");
+console.log(ketQuaMomo);

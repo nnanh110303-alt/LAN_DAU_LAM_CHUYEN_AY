@@ -1,13 +1,8 @@
-// order.js
-const tax = require("./tax");
-const vnpay = require("./payment/vnpay");
-const momo = require("./payment/momo");
-const email = require("./email/orderConfirmation");
+const tax = require("../tax");
+const vnpay = require("../payment/vnpay");
+const momo = require("../payment/momo");
+const email = require("../email");
 
-/**
- * Module nghiệp vụ đơn hàng
- * Chỉ điều phối, không chứa logic chi tiết
- */
 function createOrder(orderData, paymentGateway = "vnpay") {
     const { items, customerEmail, discount = 0 } = orderData;
 
@@ -20,7 +15,7 @@ function createOrder(orderData, paymentGateway = "vnpay") {
     // 2. Trừ giảm giá
     const afterDiscount = subtotal - discount;
 
-    // 3. Tính thuế
+    // 3. Tính thuế VAT
     const totalWithVAT = tax.calculateTotalWithVAT(afterDiscount);
 
     // 4. Tạo mã đơn
@@ -30,7 +25,7 @@ function createOrder(orderData, paymentGateway = "vnpay") {
     const payment = paymentGateway === "momo" ? momo : vnpay;
     const paymentUrl = payment.createPaymentUrl(orderId, totalWithVAT, "https://myshop.com/return");
 
-    // 6. Gửi email xác nhận (có thể gửi sau khi thanh toán thành công)
+    // 6. Gửi email xác nhận
     email.sendOrderConfirmation({
         orderId,
         customerEmail,

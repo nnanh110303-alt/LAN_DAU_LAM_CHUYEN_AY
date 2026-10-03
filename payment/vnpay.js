@@ -1,4 +1,6 @@
 // payment/vnpay.js
+const crypto = require("crypto"); // giả lập
+
 function createPaymentUrl(orderId, amount, returnUrl) {
     // Logic thực tế sẽ gọi API VNPay, ký chữ ký, tạo URL
     console.log(`[VNPay] Tạo link thanh toán cho đơn ${orderId}, số tiền ${amount}`);
