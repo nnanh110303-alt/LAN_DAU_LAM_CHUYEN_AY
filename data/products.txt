@@ -1,0 +1,6 @@
+Laptop|15000000|12
+Mouse|250000|50
+Keyboard|450000|30
+Tai nghe Bluetooth|890000|25
+Màn hình 27 inch|3200000|8
+Bàn phím cơ|1250000|15

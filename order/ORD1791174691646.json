@@ -1,0 +1,25 @@
+{
+  "orderId": "ORD1791174691646",
+  "items": [
+    {
+      "name": "Laptop",
+      "price": 15000000,
+      "quantity": 1
+    },
+    {
+      "name": "Mouse",
+      "price": 250000,
+      "quantity": 2
+    },
+    {
+      "name": "Bàn phím cơ",
+      "price": 1250000,
+      "quantity": 1
+    }
+  ],
+  "subtotal": 16750000,
+  "discount": 50000,
+  "vat": 1670000,
+  "total": 18370000,
+  "paymentUrl": "https://test-payment.momo.vn/v2/gateway/pay?orderId=ORD1791174691646&amount=18370000"
+}

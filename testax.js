@@ -1,27 +1,23 @@
-const order = require("./order");
+const fs = require("fs");
 
-console.log("========== TEST THANH TOÁN VNPAY ==========");
-const ketQuaVnpay = order.createOrder({
-    items: [
-        { name: "Áo thun", quantity: 2, price: 250000 },
-        { name: "Quần jean", quantity: 1, price: 450000 }
-    ],
-    customerEmail: "khachhang@email.com",
-    discount: 50000
-}, "vnpay");   // dùng VNPay
+// Nội dung cần ghi vào file
+const content = "Laptop\nMouse\nKeyboard";
 
-console.log("Kết quả tạo đơn hàng (VNPay):");
-console.log(ketQuaVnpay);
+// Step 1: Ghi dữ liệu vào file products.txt
+fs.writeFile("products.txt", content, "utf8", (err) => {
+    if (err) {
+        console.error("Lỗi khi ghi file:", err);
+        return;
+    }
+    console.log("--> Đã ghi file products.txt thành công!\n");
 
-console.log("\n========== TEST THANH TOÁN MOMO ==========");
-const ketQuaMomo = order.createOrder({
-    items: [
-        { name: "Áo thun", quantity: 2, price: 250000 },
-        { name: "Quần jean", quantity: 1, price: 450000 }
-    ],
-    customerEmail: "khachhang@email.com",
-    discount: 50000
-}, "momo");    // dùng Momo
-
-console.log("Kết quả tạo đơn hàng (Momo):");
-console.log(ketQuaMomo);
+    // Step 2: Đọc dữ liệu từ file products.txt vừa tạo và in ra màn hình
+    fs.readFile("products.txt", "utf8", (err, data) => {
+        if (err) {
+            console.error("Lỗi khi đọc file:", err);
+            return;
+        }
+        console.log("--- DANH SÁCH SẢN PHẨM ---");
+        console.log(data);
+    });
+});
