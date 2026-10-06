@@ -1,22 +1,288 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width= initial-scale=1.0">
-    <title>Duaweblenmang</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cửa Hàng Trực Tuyến - Express Demo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f4f7f6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #eef2f5;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 4px;
+
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 4px;
+        }
+    </style>
 </head>
+
+
 <body>
-    <ul>
-        <li> tạo 1 tài khoản githup;</li>
-        <li> Tạo Repo; Trỏ vào bên trái màn hình , đặt tên và tạo</li>
-        <li> Sau khi tạo xong, sau khi tạo xong dùng đường link https://github.com/nnanh110303-alt/web_lenmang.git</li>
-        <li> Mở visu code chứa thư mục code;</li>
-        <li> CTRl+ ')</li>
-        <li> DÙng câu lệnh git innt ( dùng để khởi tạo git ) </li>
-        <li> Thêm các file sửa đổi vào comit: git add.</li>
-        <li> conmit git: git -comit-m" name conmit'</li>
-        <li> thêm đường dẫn repo: git remote add origin ....</li>
-        <li> Pust nội dung lên online: git push -u origin master</li>
-    </ul>
+
+    <div class="container">
+
+        <!-- ===================================== -->
+        <!-- 1. TIÊU ĐỀ -->
+        <!-- ===================================== -->
+
+        <h1>🛒 Quản Lý Bán Hàng (Express.js)</h1>
+
+
+        <!-- ===================================== -->
+        <!-- 2. DANH SÁCH SẢN PHẨM -->
+        <!-- ===================================== -->
+
+        <h2>Danh sách sản phẩm</h2>
+
+        <ul id="productList">
+            <li>⚡ Đang tải sản phẩm từ Server Express...</li>
+        </ul>
+
+
+        <hr>
+
+
+        <!-- ===================================== -->
+        <!-- 3. FORM THÊM SẢN PHẨM -->
+        <!-- ===================================== -->
+
+        <h2>➕ Thêm sản phẩm mới</h2>
+
+
+        <!--
+            Khi bấm nút:
+
+            POST /products
+
+            sẽ được gửi tới Express
+        -->
+
+        <form action="/products" method="POST">
+
+            <!-- TÊN SẢN PHẨM -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Tên sản phẩm:
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    placeholder="Nhập tên sản phẩm..."
+                >
+
+            </div>
+
+
+            <!-- GIÁ SẢN PHẨM -->
+
+            <div class="form-group">
+
+                <label for="price">
+                    Giá (VNĐ):
+                </label>
+
+                <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    required
+                    min="0"
+                    placeholder="Nhập giá sản phẩm..."
+                >
+
+            </div>
+
+
+            <!-- NÚT GỬI FORM -->
+
+            <button type="submit">
+                Thêm Vào Cửa Hàng
+            </button>
+
+        </form>
+
+
+        <div class="message">
+            Sau khi thêm sản phẩm, trang sẽ quay lại trang chủ.
+        </div>
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- JAVASCRIPT -->
+    <!-- ===================================== -->
+
+    <script>
+
+        // ==================================================
+        // GỌI API LẤY DANH SÁCH SẢN PHẨM
+        // ==================================================
+
+        fetch("/api/products")
+
+            .then(response => {
+
+                // Kiểm tra server có trả về thành công không
+
+                if (!response.ok) {
+                    throw new Error("Server trả về lỗi");
+                }
+
+                return response.json();
+            })
+
+
+            .then(result => {
+
+                console.log("Dữ liệu nhận từ API:", result);
+
+
+                const list =
+                    document.getElementById("productList");
+
+
+                // Xóa dòng:
+                // "Đang tải sản phẩm..."
+
+                list.innerHTML = "";
+
+
+                // Kiểm tra dữ liệu
+
+                if (!result.success) {
+
+                    list.innerHTML =
+                        "<li>❌ Không lấy được sản phẩm</li>";
+
+                    return;
+                }
+
+
+                // Nếu chưa có sản phẩm
+
+                if (result.data.length === 0) {
+
+                    list.innerHTML =
+                        "<li>Chưa có sản phẩm</li>";
+
+                    return;
+                }
+
+
+                // Duyệt từng sản phẩm
+
+                result.data.forEach(product => {
+
+                    const li =
+                        document.createElement("li");
+
+
+                    li.innerHTML = `
+                        <strong>
+                            ${product.name}
+                        </strong>
+
+                        <span>
+                            ${product.price.toLocaleString("vi-VN")} VNĐ
+                        </span>
+                    `;
+
+
+                    list.appendChild(li);
+
+                });
+
+            })
+
+
+            .catch(error => {
+
+                console.error(
+                    "Lỗi gọi API:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "productList"
+                ).innerHTML =
+                    "<li>❌ Lỗi kết nối Server Express</li>";
+
+            });
+
+    </script>
+
 </body>
+
 </html>
