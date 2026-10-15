@@ -1,0 +1,13 @@
+USE shop_db;
+
+CREATE TABLE orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id VARCHAR(50) NOT NULL UNIQUE,
+  customer_name VARCHAR(100),
+  customer_email VARCHAR(100),
+  subtotal DECIMAL(15,2),
+  discount DECIMAL(15,2) DEFAULT 0,
+  vat DECIMAL(15,2),
+  total DECIMAL(15,2),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

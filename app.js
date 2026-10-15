@@ -126,222 +126,268 @@
 
 
 
+// const express = require("express");
+// const path = require("path");
+
+// const app = express();
+// const PORT = 3001
+
+// console.log("=================================");
+// console.log("ĐÂY LÀ APP.JS MỚI CỦA THẦY VÀ EM");
+// console.log("FILE ĐANG CHẠY:", __filename);
+// console.log("=================================");
+
+// ;
+
+
+// // ==================================================
+// // 1. MIDDLEWARE
+// // ==================================================
+
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+
+
+// // ==================================================
+// // 2. CHO PHÉP EXPRESS PHỤC VỤ FILE HTML
+// // ==================================================
+
+// app.use(express.static(__dirname));
+
+
+// // ==================================================
+// // 3. DỮ LIỆU SẢN PHẨM
+// // ==================================================
+
+// let products = [
+//   {
+//     id: 1,
+//     name: "Áo thun basic",
+//     price: 199000,
+//     stock: 50
+//   },
+//   {
+//     id: 2,
+//     name: "Quần jean slim",
+//     price: 399000,
+//     stock: 30
+//   },
+//   {
+//     id: 3,
+//     name: "Giày sneaker",
+//     price: 890000,
+//     stock: 15
+//   }
+// ];
+
+
+// // ==================================================
+// // 4. TRANG CHỦ
+// // ==================================================
+
+// app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname, "index.html"));
+// });
+
+
+// // ==================================================
+// // 5. NHẬN FORM THÊM SẢN PHẨM
+// // ==================================================
+
+// app.post("/products", (req, res) => {
+
+//   console.log("========== POST /products ==========");
+//   console.log("Dữ liệu nhận được:", req.body);
+
+//   const { name, price } = req.body;
+
+
+//   // Kiểm tra dữ liệu
+//   if (!name || price === undefined || price === "") {
+//     return res.status(400).send("Thiếu tên hoặc giá sản phẩm");
+//   }
+
+
+//   // Tạo ID mới
+//   const newId =
+//     products.length > 0
+//       ? Math.max(...products.map(p => p.id)) + 1
+//       : 1;
+
+
+//   // Tạo sản phẩm mới
+//   const newProduct = {
+//     id: newId,
+//     name: name,
+//     price: Number(price),
+//     stock: 0
+//   };
+
+
+//   // Thêm vào mảng products
+//   products.push(newProduct);
+
+
+//   console.log("Sản phẩm mới:", newProduct);
+//   console.log("Danh sách sản phẩm:", products);
+
+
+//   // Quay lại trang chủ
+//   res.redirect("/");
+// });
+
+
+// // ==================================================
+// // 6. API LẤY DANH SÁCH SẢN PHẨM
+// // ==================================================
+
+// app.get("/api/products", (req, res) => {
+
+//   res.json({
+//     success: true,
+//     total: products.length,
+//     data: products
+//   });
+
+// });
+
+
+// // ==================================================
+// // 7. API LẤY 1 SẢN PHẨM
+// // ==================================================
+
+// app.get("/api/products/:id", (req, res) => {
+
+//   const id = parseInt(req.params.id);
+
+//   const product = products.find(p => p.id === id);
+
+
+//   if (!product) {
+
+//     return res.status(404).json({
+//       success: false,
+//       message: "Không tìm thấy sản phẩm"
+//     });
+
+//   }
+
+
+//   res.json({
+//     success: true,
+//     data: product
+//   });
+
+// });
+
+
+// // ==================================================
+// // 8. API THÊM SẢN PHẨM BẰNG JSON
+// // ==================================================
+
+// app.post("/api/products", (req, res) => {
+
+//   const { name, price, stock } = req.body;
+
+
+//   if (!name || price === undefined) {
+
+//     return res.status(400).json({
+//       success: false,
+//       message: "Thiếu name hoặc price"
+//     });
+
+//   }
+
+
+//   const newId =
+//     products.length > 0
+//       ? Math.max(...products.map(p => p.id)) + 1
+//       : 1;
+
+
+//   const newProduct = {
+
+//     id: newId,
+
+//     name: name,
+
+//     price: Number(price),
+
+//     stock: Number(stock) || 0
+
+//   };
+
+
+//   products.push(newProduct);
+
+
+//   res.status(201).json({
+
+//     success: true,
+
+//     data: newProduct
+
+//   });
+
+// });
+
+
+// // ==================================================
+// // 9. CHẠY SERVER
+// // ==================================================
+
+// app.listen(PORT, () => {
+
+//   console.log("=================================");
+//   console.log("Server Express đang chạy");
+//   console.log(`http://localhost:${PORT}`);
+//   console.log("=================================");
+
+// });
+
+
+
+
 const express = require("express");
-const path = require("path");
+const productRoutes = require("./routes/product.routes");
 
 const app = express();
-const PORT = 3001
 
-console.log("=================================");
-console.log("ĐÂY LÀ APP.JS MỚI CỦA THẦY VÀ EM");
-console.log("FILE ĐANG CHẠY:", __filename);
-console.log("=================================");
-
-;
-
-
-// ==================================================
-// 1. MIDDLEWARE
-// ==================================================
-
+// Phải có dòng này để Express hiểu được dữ liệu JSON khách gửi lên (req.body)
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// Gắn Router vào ứng dụng
+app.use("/api/products", productRoutes);
 
 
-// ==================================================
-// 2. CHO PHÉP EXPRESS PHỤC VỤ FILE HTML
-// ==================================================
-
-app.use(express.static(__dirname));
 
 
-// ==================================================
-// 3. DỮ LIỆU SẢN PHẨM
-// ==================================================
+// ========== TEST TẠM HÀM createOrder ==========
+const { createOrder } = require("./order");
 
-let products = [
-  {
-    id: 1,
-    name: "Áo thun basic",
-    price: 199000,
-    stock: 50
-  },
-  {
-    id: 2,
-    name: "Quần jean slim",
-    price: 399000,
-    stock: 30
-  },
-  {
-    id: 3,
-    name: "Giày sneaker",
-    price: 890000,
-    stock: 15
-  }
-];
+app.get("/api/test-order", async (req, res) => {
+    try {
+        const orderData = {
+            customerEmail: "test@gmail.com",
+            customerName: "Nguyễn Văn Test",
+            discount: 0,
+            items: [
+                // Lấy id thật từ bảng products của em
+                { productId: 1, name: "Giày thể thao", price: 1500000, quantity: 1 },
+                { productId: 7, name: "Mũ lưới trai", price: 120000, quantity: 2 }
+            ]
+        };
 
-
-// ==================================================
-// 4. TRANG CHỦ
-// ==================================================
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+        const result = await createOrder(orderData, "momo");
+        res.json({ success: true, data: result });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
 });
+// ========== HẾT PHẦN TEST ==========
 
-
-// ==================================================
-// 5. NHẬN FORM THÊM SẢN PHẨM
-// ==================================================
-
-app.post("/products", (req, res) => {
-
-  console.log("========== POST /products ==========");
-  console.log("Dữ liệu nhận được:", req.body);
-
-  const { name, price } = req.body;
-
-
-  // Kiểm tra dữ liệu
-  if (!name || price === undefined || price === "") {
-    return res.status(400).send("Thiếu tên hoặc giá sản phẩm");
-  }
-
-
-  // Tạo ID mới
-  const newId =
-    products.length > 0
-      ? Math.max(...products.map(p => p.id)) + 1
-      : 1;
-
-
-  // Tạo sản phẩm mới
-  const newProduct = {
-    id: newId,
-    name: name,
-    price: Number(price),
-    stock: 0
-  };
-
-
-  // Thêm vào mảng products
-  products.push(newProduct);
-
-
-  console.log("Sản phẩm mới:", newProduct);
-  console.log("Danh sách sản phẩm:", products);
-
-
-  // Quay lại trang chủ
-  res.redirect("/");
-});
-
-
-// ==================================================
-// 6. API LẤY DANH SÁCH SẢN PHẨM
-// ==================================================
-
-app.get("/api/products", (req, res) => {
-
-  res.json({
-    success: true,
-    total: products.length,
-    data: products
-  });
-
-});
-
-
-// ==================================================
-// 7. API LẤY 1 SẢN PHẨM
-// ==================================================
-
-app.get("/api/products/:id", (req, res) => {
-
-  const id = parseInt(req.params.id);
-
-  const product = products.find(p => p.id === id);
-
-
-  if (!product) {
-
-    return res.status(404).json({
-      success: false,
-      message: "Không tìm thấy sản phẩm"
-    });
-
-  }
-
-
-  res.json({
-    success: true,
-    data: product
-  });
-
-});
-
-
-// ==================================================
-// 8. API THÊM SẢN PHẨM BẰNG JSON
-// ==================================================
-
-app.post("/api/products", (req, res) => {
-
-  const { name, price, stock } = req.body;
-
-
-  if (!name || price === undefined) {
-
-    return res.status(400).json({
-      success: false,
-      message: "Thiếu name hoặc price"
-    });
-
-  }
-
-
-  const newId =
-    products.length > 0
-      ? Math.max(...products.map(p => p.id)) + 1
-      : 1;
-
-
-  const newProduct = {
-
-    id: newId,
-
-    name: name,
-
-    price: Number(price),
-
-    stock: Number(stock) || 0
-
-  };
-
-
-  products.push(newProduct);
-
-
-  res.status(201).json({
-
-    success: true,
-
-    data: newProduct
-
-  });
-
-});
-
-
-// ==================================================
-// 9. CHẠY SERVER
-// ==================================================
-
+const PORT = 3000;
 app.listen(PORT, () => {
-
-  console.log("=================================");
-  console.log("Server Express đang chạy");
-  console.log(`http://localhost:${PORT}`);
-  console.log("=================================");
-
+  console.log(`Server TopShoe đang chạy tại http://localhost:${PORT}`);
 });
