@@ -351,7 +351,7 @@
 
 const express = require("express");
 const productRoutes = require("./routes/product.routes");
-
+const orderRoutes = require('./routes/orderRoutes');
 const app = express();
 
 // Phải có dòng này để Express hiểu được dữ liệu JSON khách gửi lên (req.body)
@@ -360,7 +360,7 @@ app.use(express.json());
 // Gắn Router vào ứng dụng
 app.use("/api/products", productRoutes);
 
-
+app.use('/api/orders', orderRoutes);
 
 
 // ========== TEST TẠM HÀM createOrder ==========

@@ -14,4 +14,6 @@ router.post("/", productController.createProduct);
 // Mua hàng (thanh toán)
 router.post("/checkout", productController.checkoutProduct);
 
+
 module.exports = router;
+
