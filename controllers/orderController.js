@@ -15,6 +15,7 @@ const createOrder = async (req, res) => {
     try {
         await connection.beginTransaction();
 
+        
         let totalAmount = 0;
         const orderItemsData = [];
 

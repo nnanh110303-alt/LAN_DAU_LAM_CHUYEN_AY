@@ -352,6 +352,7 @@
 const express = require("express");
 const productRoutes = require("./routes/product.routes");
 const orderRoutes = require('./routes/orderRoutes');
+const authRoutes = require('./routes/authRoutes');
 const app = express();
 
 // Phải có dòng này để Express hiểu được dữ liệu JSON khách gửi lên (req.body)
@@ -361,6 +362,9 @@ app.use(express.json());
 app.use("/api/products", productRoutes);
 
 app.use('/api/orders', orderRoutes);
+
+// Định tuyến các API liên quan đến xác thực (Authentication)
+app.use('/api/auth', authRoutes);
 
 
 // ========== TEST TẠM HÀM createOrder ==========
@@ -387,7 +391,8 @@ app.get("/api/test-order", async (req, res) => {
 });
 // ========== HẾT PHẦN TEST ==========
 
-const PORT = 3000;
+const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`Server TopShoe đang chạy tại http://localhost:${PORT}`);
+    console.log(`🚀 SERVER ĐÃ CẬP NHẬT! Đang lắng nghe tại cổng ${PORT}`);
 });
+//   console.log(`Server TopShoe đang chạy tại http://localhost:${PORT}`);
