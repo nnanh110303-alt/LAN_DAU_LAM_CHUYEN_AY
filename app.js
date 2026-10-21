@@ -354,6 +354,8 @@ const productRoutes = require("./routes/product.routes");
 const orderRoutes = require('./routes/orderRoutes');
 const authRoutes = require('./routes/authRoutes');
 const app = express();
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
 // Phải có dòng này để Express hiểu được dữ liệu JSON khách gửi lên (req.body)
 app.use(express.json());
