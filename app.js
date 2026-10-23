@@ -348,7 +348,8 @@
 
 
 
-
+require('dotenv').config();
+const profileRoutes = require('./routes/profileRoutes');
 const express = require("express");
 const productRoutes = require("./routes/product.routes");
 const orderRoutes = require('./routes/orderRoutes');
@@ -362,6 +363,7 @@ app.use(express.json());
 
 // Gắn Router vào ứng dụng
 app.use("/api/products", productRoutes);
+app.use('/api/profile', profileRoutes)
 
 app.use('/api/orders', orderRoutes);
 

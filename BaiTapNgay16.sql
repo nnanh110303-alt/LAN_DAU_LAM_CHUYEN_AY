@@ -25,26 +25,5 @@
 -- 1. Chỉ định rõ sẽ thao tác trên cơ sở dữ liệu nào
 USE shop_db;
 
--- 2. Xóa bảng users cũ đi (nếu nó đang tồn tại) để dọn đường
-DROP TABLE IF EXISTS users;
-
--- 3. Tạo lại bảng users phiên bản nâng cấp (có password, role, token_version)
-CREATE TABLE users (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(100) NOT NULL,
-  email VARCHAR(255) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL,
-  role ENUM('customer', 'admin') DEFAULT 'customer',
-  token_version INT DEFAULT 0,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- 4. Tạo thêm bảng refresh_tokens để phục vụ bảo mật JWT nâng cao
-CREATE TABLE refresh_tokens (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  user_id INT NOT NULL,
-  token VARCHAR(500) NOT NULL,
-  expires_at DATETIME NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
+UPDATE users SET role = 'customer' WHERE email = 'test@gmail.com';
+SELECT id, email, role FROM users WHERE email = 'test@gmail.com';
