@@ -131,4 +131,62 @@ const getOrderById = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Lỗi server' });
     }
 };
-module.exports = { createOrder, getOrderById };
+
+// DELETE /api/orders/:id  (hủy đơn + hoàn kho)
+const cancelOrder = async (req, res) => {
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
+
+        // Khóa dòng đơn để 2 request hủy cùng lúc không chạy song song
+        const [rows] = await connection.query(
+            'SELECT * FROM orders WHERE id = ? FOR UPDATE',
+            [req.params.id]
+        );
+        const order = rows[0];
+
+        // Lớp 2: ownership (không tồn tại hoặc không phải của mình -> cùng 404)
+        const isOwner = order && order.user_id === req.user.id;
+        const isAdmin = req.user.role === 'admin';
+        if (!order || (!isOwner && !isAdmin)) {
+            await connection.rollback();
+            return res.status(404).json({ success: false, message: 'Không tìm thấy đơn hàng' });
+        }
+
+        // Lớp 3: luật nghiệp vụ
+        if (order.status !== 'pending') {
+            await connection.rollback();
+            return res.status(400).json({
+                success: false,
+                message: 'Chỉ hủy được đơn đang chờ xử lý'
+            });
+        }
+
+        // Hoàn kho theo từng dòng trong đơn
+        const [items] = await connection.query(
+            'SELECT product_id, quantity FROM order_items WHERE order_id = ?',
+            [order.id]
+        );
+        for (const it of items) {
+            await connection.query(
+                'UPDATE products SET quantity = quantity + ? WHERE id = ?',
+                [it.quantity, it.product_id]
+            );
+        }
+
+        await connection.query(
+            "UPDATE orders SET status = 'cancelled' WHERE id = ?",
+            [order.id]
+        );
+
+        await connection.commit();
+        return res.json({ success: true, message: 'Đã hủy đơn hàng và hoàn kho' });
+    } catch (err) {
+        await connection.rollback();
+        console.error(err);
+        return res.status(500).json({ success: false, message: 'Lỗi server' });
+    } finally {
+        connection.release();
+    }
+};
+module.exports = { createOrder, getOrderById, cancelOrder};

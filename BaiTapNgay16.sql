@@ -25,5 +25,7 @@
 -- 1. Chỉ định rõ sẽ thao tác trên cơ sở dữ liệu nào
 USE shop_db;
 
-UPDATE users SET role = 'customer' WHERE email = 'test@gmail.com';
-SELECT id, email, role FROM users WHERE email = 'test@gmail.com';
+SELECT id, user_id, order_id, total, status FROM orders;
+SELECT id, quantity FROM products WHERE id = 1;
+SELECT id, user_id, order_id, total FROM orders ORDER BY id DESC LIMIT 1;
+SELECT id, quantity FROM products WHERE id = 1;
